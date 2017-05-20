@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  Main.swift
 //  Pokedex
 //
 //  Created by Shengyu Cao on 5/17/17.
@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
+class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
     
     
 
@@ -32,6 +32,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         parsePokemonCSV()
         initAudio()
+        
+        
         
     }
     
@@ -105,6 +107,17 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+        var poke: Pokemon!
+        
+        if inSearchMode{
+            poke = filteredPokemon[indexPath.row]
+        } else {
+            poke = pokemon[indexPath.row]
+        }
+    
+        performSegue(withIdentifier: "PokeDetailVC", sender: poke)
+    
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -123,6 +136,18 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return CGSize(width: 105, height: 105)
         
         
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "PokeDetailVC" {
+            if let destinationVC = segue.destination as? PokeDetailVC {
+                if let poke = sender as? Pokemon {
+                    destinationVC.pokemon = poke
+                    
+                    
+                }
+            }
+        }
     }
     
     
